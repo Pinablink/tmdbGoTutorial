@@ -1,8 +1,11 @@
 # ESTE MATERIAL AINDA ESTA EM CONSTRUÇÃO. 
 
 # tmdbGoTutorial
-Este aplicativo foi desenvolvido para ser um material básico de consulta. Que possa proporcionar a você visitante, uma referência ao uso de Golang na Infra AWS. Com esse recurso, você será capaz de obter um conhecimento básico do consumo de uma Aplicação escrita em Golang, aos dados da API TMDB www.themoviedb.org.
-<br/>
+
+![Alt text](img/tmdbGoTutorialResult.gif)
+
+Este aplicativo foi desenvolvido para ser um material básico de consulta. Que possa proporcionar a você visitante, uma referência ao uso da linguagem Golang na Infra AWS. Com esse recurso, você será capaz de obter um conhecimento básico do consumo de uma Aplicação escrita em Golang, aos dados da API TMDB www.themoviedb.org.
+</br>
 
 ### 👀 Você deve se perguntar. O que esse conteúdo vai me proporcionar?
 
