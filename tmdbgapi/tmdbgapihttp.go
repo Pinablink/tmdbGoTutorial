@@ -40,7 +40,10 @@ func (ref TmdbgApiHttp) GetPopularFilms() (strHtml string, getPopularFilmsError 
 	var streamBody []byte
 	var streamReadError error
 	var FORMAT_ERROR_MESSAGE string = "%s \n %s"
+	var FORMAT_URL_OPT_POPULAR string = "%s%s"
 
+	ref.urlapitmdb = fmt.Sprintf(FORMAT_URL_OPT_POPULAR, ref.urlapitmdb, tmdbgutil.VAL_POPULAR_FILMS_CATEG_TMDB)
+	fmt.Println(ref.urlapitmdb)
 	request, iError := http.NewRequest("GET", ref.urlapitmdb, nil)
 
 	if iError != nil {

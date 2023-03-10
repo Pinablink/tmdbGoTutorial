@@ -3,6 +3,7 @@ package tmdbgbody
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"tmdbGotutorial/tmdbgomodel"
 	"tmdbGotutorial/tmdbgutil"
 )
@@ -57,9 +58,8 @@ var SUCESS_HTTP_RESPONSE = `<!DOCTYPE html>
 	<html lang="pt-br">
 		<head>
 			<meta charset="utf-8">
-			<title>Teste</title>
+			<title>Tmdb Tutorial - Filmes Populares</title>
 			<style>
-				
 				.tmdb-home-card {
 						display: block;
 						width: 100vw;
@@ -68,13 +68,12 @@ var SUCESS_HTTP_RESPONSE = `<!DOCTYPE html>
 						text-align: center;
 						color: white;
 						background-image: url(data:image/jpeg;base64,%s);
-						background-position: 30% 45%;
+						background-position: %s;
 						background-color: black;
 						-webkit-background-size: co;
 						-moz-background-size: cover;
 						background-size: cover;
 						-o-background-size: cover;
-				
 				 }
 	
 				.row-tmdb-flip-card {
@@ -95,8 +94,8 @@ var SUCESS_HTTP_RESPONSE = `<!DOCTYPE html>
 	
 				.flipper {
 					position: relative;
-					width: 100%;
-					height: 100%;
+					width: %s;
+					height: %s;
 					transition: transform 0.8s;
 					transform-style: preserve-3d;
 				}
@@ -109,8 +108,8 @@ var SUCESS_HTTP_RESPONSE = `<!DOCTYPE html>
 				.front, .back{
 					position: absolute;
 					border-radius: 8px;
-					width: 100%;
-					height: 100%;
+					width: %s;
+					height: %s;
 					backface-visibility: hidden;
 				}
 	
@@ -205,15 +204,49 @@ func (ref TmdbgBodyPopularFilms) SetStreamB64Resources(strB64ImgHome, strB64ImgE
 }
 
 //
+func prepareCards(refStructFilmsPopular *tmdbgomodel.TmdbListPopularFilmModel) (panelCards string) {
+
+	var list []tmdbgomodel.TmdbPopularFilmModel = refStructFilmsPopular.Results
+	var viewCards string = ""
+
+	for _, popularFilm := range list {
+		imgSrc := popularFilm.Poster_Path
+		title := popularFilm.Original_Title
+		votesAverage := strconv.FormatFloat(popularFilm.Vote_Average, 'f', 0, 32)
+		voteCount := strconv.Itoa(popularFilm.Vote_Count)
+		dateRelease := popularFilm.Release_Date
+		overwiew := popularFilm.Overview
+		imgSrc = fmt.Sprintf("%s%s", tmdbgutil.VAL_PATH_URL_POSTER_IMAGE_TMDB, imgSrc)
+		viewCards = fmt.Sprintf("%s%s", viewCards, fmt.Sprintf(HOME_CARD_FILM_POPULAR, imgSrc, title, votesAverage, voteCount, dateRelease, overwiew))
+	}
+
+	return viewCards
+}
+
+//
 func renderPopularFilmsPage(data interface{}, statusCode int) (resultHtml string) {
 	var dataResponse []byte = data.([]byte)
+	var errorPage TmdbgBodyError = NewTmdbgBodyError()
+	var formatErrorMsg string = "%s \n %s"
+	var modelException *tmdbgomodel.TmdbgModelResponseError = &tmdbgomodel.TmdbgModelResponseError{}
 
 	if statusCode == 200 {
-		// IMPLEMENTAR AQUI O SUCESSSO
+
+		var responseStructFilmsPopular *tmdbgomodel.TmdbListPopularFilmModel = &tmdbgomodel.TmdbListPopularFilmModel{}
+		iError := json.Unmarshal(dataResponse, responseStructFilmsPopular)
+
+		if iError != nil {
+			message := fmt.Sprintf(formatErrorMsg, tmdbgutil.MSG_ERROR_JSON_PROCESS, iError.Error())
+			return errorPage.GetHtmlPageError(backgroundImageExceptionBase64, message)
+		} else {
+			messageRet := prepareCards(responseStructFilmsPopular)
+			messageRet = fmt.Sprintf(SUCESS_HTTP_RESPONSE, backgroundImageHomeBase64, "30% 45%", "100%", "100%", "100%", "100%", backgroundImageCardBase64, messageRet)
+
+			return messageRet
+		}
+
 	} else {
-		var errorPage TmdbgBodyError = NewTmdbgBodyError()
-		var formatErrorMsg string = "%s \n %s"
-		var modelException *tmdbgomodel.TmdbgModelResponseError = &tmdbgomodel.TmdbgModelResponseError{}
+
 		iError := json.Unmarshal(dataResponse, modelException)
 
 		if iError != nil {
@@ -226,5 +259,4 @@ func renderPopularFilmsPage(data interface{}, statusCode int) (resultHtml string
 
 	}
 
-	return ""
 }

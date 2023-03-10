@@ -8,5 +8,6 @@ const (
 	ATTR_AUTHORIZATION_TMDB                  = "Authorization"
 	ATTR_API_KEY_TMDB                        = "api_key"
 	VAL_AUTHORIZATION_TMDB                   = "Bearer "
-	VAL_POPULAR_FILMS_CATEG                  = "popular"
+	VAL_POPULAR_FILMS_CATEG_TMDB             = "popular"
+	VAL_PATH_URL_POSTER_IMAGE_TMDB           = "https://image.tmdb.org/t/p/original"
 )
