@@ -2,6 +2,8 @@
 
 ![Alt text](img/tmdbGoTutorialResult.gif)
 
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/Pinablink/tmdbGoTutorial?style=plastic)
+
 **Para mais detalhes leia também https://medium.com/@weberasantos/golang-consumindo-api-tmdb-em-uma-infra-aws-4a8c540a93d6**
 
 Este aplicativo foi desenvolvido para ser um **material básico de consulta**. Que possa proporcionar a você visitante, uma referência ao uso da **linguagem Golang** na **Infra AWS**. Com esse recurso, você será capaz de obter um conhecimento básico do consumo de uma Aplicação escrita em Golang, aos dados da **API TMDB** www.themoviedb.org.
@@ -63,3 +65,7 @@ O projeto desse aplicativo está organizado nos seguintes pacotes.
 
 * 📁 tmdbgutil
 </br> **Pacote para disponibilizar funcionalidades comuns a aplicação. Contem uma estrutura com a definição de constantes que atende toda a aplicação**
+
+</br>
+
+👍 **Obrigado pela sua visita!** 👍
