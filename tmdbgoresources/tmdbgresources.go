@@ -3,46 +3,39 @@ package tmdbgoresources
 import (
 	"errors"
 	"os"
+	"tmdbGotutorial/tmdbgutil"
 )
 
 // Responsável por prover os recursos para a solução
 type TmdbgResources struct {
-	baseUrlTMDB  string
-	keyTokenTMDB string
-	tokenTMDB    string
+	baseUrlTMDB string
+	tokenTMDB   string
 }
 
 // NewTmdbgResources: Cria uma referência da estrutura em memória. Podemos dizer também, um objeto
 func NewTmdbgResources() TmdbgResources {
 	var strBaseUrlTMDB string = os.Getenv("BASE_URL_TMDB")
-	var strKeyTokenTMDB string = os.Getenv("KEY_TOKEN_TMDB")
 	var strTokenTMDB string = os.Getenv("TOKEN_TMDB")
 
 	return TmdbgResources{
-		baseUrlTMDB:  strBaseUrlTMDB,
-		keyTokenTMDB: strKeyTokenTMDB,
-		tokenTMDB:    strTokenTMDB,
+		baseUrlTMDB: strBaseUrlTMDB,
+		tokenTMDB:   strTokenTMDB,
 	}
 }
 
 // GetDataAccessTMDB : Retorna os dados necessários ao acesso da API, incluídos como variáveis de ambiente
-func (ob TmdbgResources) GetDataAccessTMDB() (baseUrl string, keyToken string, token string, erro error) {
+func (ob TmdbgResources) GetDataAccessTMDB() (baseUrl string, token string, erro error) {
 
 	refBaseUrl := ob.baseUrlTMDB
-	refKeyToken := ob.keyTokenTMDB
 	refToken := ob.tokenTMDB
 
 	if len(refBaseUrl) == 0 {
-		return "", "", "", errors.New("Não foi encontrado Base URL da API")
-	}
-
-	if len(refKeyToken) == 0 {
-		return "", "", "", errors.New("Não foi encontrado a chave token da API")
+		return "", "", errors.New(tmdbgutil.MSG_ERROR_BASE_URL_API_NOT_FOUND)
 	}
 
 	if len(refToken) == 0 {
-		return "", "", "", errors.New("Não foi encontrado o token da API")
+		return "", "", errors.New(tmdbgutil.MSG_ERROR_API_NOT_FOUND)
 	}
 
-	return ob.baseUrlTMDB, ob.keyTokenTMDB, ob.tokenTMDB, nil
+	return ob.baseUrlTMDB, ob.tokenTMDB, nil
 }

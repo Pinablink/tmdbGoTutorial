@@ -5,6 +5,7 @@ import (
 	"tmdbGotutorial/tmdbgapi"
 	"tmdbGotutorial/tmdbgbody"
 	"tmdbGotutorial/tmdbgoresources"
+	"tmdbGotutorial/tmdbgutil"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -51,7 +52,7 @@ func HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProx
 		// Obtêm os recursos necessários para a execução da Função
 		var resources tmdbgoresources.TmdbgResources = tmdbgoresources.NewTmdbgResources()
 
-		strBaseUrl, strKeyToken, strToken, resError := resources.GetDataAccessTMDB()
+		strBaseUrl, strToken, resError := resources.GetDataAccessTMDB()
 
 		if resError != nil {
 
@@ -63,7 +64,7 @@ func HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProx
 
 		} else {
 
-			httpApi = tmdbgapi.NewTmdbgApiHttp(strKeyToken, strToken, strBaseUrl, pagePopularFilms.RenderPage)
+			httpApi = tmdbgapi.NewTmdbgApiHttp(strToken, strBaseUrl, pagePopularFilms.RenderPage)
 
 			htmlResponse, errResponse := httpApi.GetPopularFilms()
 
@@ -87,13 +88,12 @@ func HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProx
 func getObjBucket(nameObj string) (errorLoadBucket bool, messageErrorLoadBucket string, resultBucket string) {
 
 	var msgErrorLoadBucket, strResultData string
-	//mBucket, errCreate := tmdbgS3.NewTmdbgBucket("tmdb-tutorial", "my_img_tutor_tmdb.dat")
-	mBucket, errCreate := tmdbgS3.NewTmdbgBucket("tmdb-tutorial", nameObj)
+	mBucket, errCreate := tmdbgS3.NewTmdbgBucket(tmdbgutil.ATTR_BUCKET_S3_NAME, nameObj)
 
 	if errCreate != nil {
 		// Tratamento de proteção, caso ocorra erro de carregamento do bucket. Entrar aqui
 		// significa que você deve revisar o seu bucket S3
-		msgErrorLoadBucket = "Erro no Carregamento do Bucket"
+		msgErrorLoadBucket = tmdbgutil.MSG_ERROR_LOAD_BUCKET_S3
 		return true, msgErrorLoadBucket, ""
 	}
 
@@ -102,7 +102,7 @@ func getObjBucket(nameObj string) (errorLoadBucket bool, messageErrorLoadBucket 
 	if s3Err != nil {
 		// Tratamento de proteção, caso ocorra erro de carregamento do bucket. Entrar aqui
 		// significa que você deve revisar o seu bucket S3
-		msgErrorLoadBucket = "Erro no processamento do S3"
+		msgErrorLoadBucket = tmdbgutil.MSG_ERROR_PROCESS_BUCKET_S3
 		return true, msgErrorLoadBucket, ""
 	}
 
@@ -114,19 +114,19 @@ func getObjBucket(nameObj string) (errorLoadBucket bool, messageErrorLoadBucket 
 // Carrega todos os objetos existentes no Bucket
 func loadDataBucketS3() (existError bool, messageError string) {
 
-	errorLoadBucketBE, msgErrorLoadBE, resultBE := getObjBucket("my_img_tutor_tmdb_exception.dat")
+	errorLoadBucketBE, msgErrorLoadBE, resultBE := getObjBucket(tmdbgutil.ATTR_NAME_IMG_TUTOR_BACK_EXCEPTION_DAT)
 
 	if errorLoadBucketBE {
 		return true, msgErrorLoadBE
 	}
 
-	errorLoadBH, msgErrorLoadBH, resultBH := getObjBucket("my_img_tutor_tmdb_home.dat")
+	errorLoadBH, msgErrorLoadBH, resultBH := getObjBucket(tmdbgutil.ATTR_NAME_IMG_TUTOR_HOME_DAT)
 
 	if errorLoadBH {
 		return true, msgErrorLoadBH
 	}
 
-	errorLoadBC, msgErrorLoadBC, resultBC := getObjBucket("my_img_tutor_tmdb_back_card.dat")
+	errorLoadBC, msgErrorLoadBC, resultBC := getObjBucket(tmdbgutil.ATTR_NAME_IMG_TUTOR_BACK_CARD)
 
 	if errorLoadBC {
 		return true, msgErrorLoadBC

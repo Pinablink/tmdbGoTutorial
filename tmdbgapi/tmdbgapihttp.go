@@ -10,16 +10,14 @@ import (
 
 //
 type TmdbgApiHttp struct {
-	keyTokenTmdb string
 	apiTokentmdb string
 	urlapitmdb   string
 	rendererPage func(interface{}, int) string
 }
 
 // Criar uma estrutura de comunicação com a API TMDB.
-func NewTmdbgApiHttp(strKeyTokenTmdb, strTokenTmdb, strUrlApiTmdb string, renderer func(interface{}, int) string) TmdbgApiHttp {
+func NewTmdbgApiHttp(strTokenTmdb, strUrlApiTmdb string, renderer func(interface{}, int) string) TmdbgApiHttp {
 	return TmdbgApiHttp{
-		keyTokenTmdb: strKeyTokenTmdb,
 		apiTokentmdb: strTokenTmdb,
 		urlapitmdb:   strUrlApiTmdb,
 		rendererPage: renderer,
@@ -53,7 +51,6 @@ func (ref TmdbgApiHttp) GetPopularFilms() (strHtml string, getPopularFilmsError 
 	// Preparando a Requisição para a API
 	var strAuthorization string = ref.createAuthorization()
 	request.Header.Add(tmdbgutil.ATTR_AUTHORIZATION_TMDB, strAuthorization)
-	request.URL.Query().Add(tmdbgutil.ATTR_API_KEY_TMDB, ref.keyTokenTmdb)
 
 	client := &http.Client{}
 	response, response_error := client.Do(request)

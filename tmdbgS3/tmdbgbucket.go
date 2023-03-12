@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"io/ioutil"
+	"tmdbGotutorial/tmdbgutil"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -44,7 +45,7 @@ func (ref TmdbgBucket) GetErrorMessage() (dataStr string, iError error) {
 	})
 
 	if iErr != nil {
-		return "", errors.New("Erro ao Carregar recurso do Bucket S3")
+		return "", errors.New(tmdbgutil.MSG_ERROR_LOAD_RESOURCE_BUCKET_S3)
 	}
 
 	defer result.Body.Close()
@@ -52,7 +53,7 @@ func (ref TmdbgBucket) GetErrorMessage() (dataStr string, iError error) {
 	body, errReadBody := ioutil.ReadAll(result.Body)
 
 	if errReadBody != nil {
-		return "", errors.New("Erro ao ler estrutura do objeto S3")
+		return "", errors.New(tmdbgutil.MSG_ERROR_READ_STRUCT_OBJ_BUCKET_S3)
 	}
 
 	strReturn := string(body)
