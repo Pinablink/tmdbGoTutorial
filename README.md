@@ -3,6 +3,8 @@
 ![Alt text](img/tmdbGoTutorialResult.gif)
 
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/Pinablink/tmdbGoTutorial?style=plastic)
+![Alt text](https://img.shields.io/badge/AWS-Lambda-blue?style=plastic)
+![Alt text](https://img.shields.io/badge/AWS-S3-blue?style=plastic)
 
 **Para mais detalhes leia também https://medium.com/@weberasantos/golang-consumindo-api-tmdb-em-uma-infra-aws-4a8c540a93d6**
 
